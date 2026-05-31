@@ -1,59 +1,77 @@
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { app } from "../firebase/firebase";
+import type React from "react";
+import { useState } from "react";
+import type { User } from "../types/authType";
+import AuthLayout from "../components/AuthLayout";
+import AuthLabel from "../components/AuthLabel";
+import AuthInput from "../components/AuthInput";
+import AuthButton from "../components/AuthButton";
+import AuthSpan from "../components/AuthSpan";
+
 
 function Login() {
     const nav = useNavigate()
+    const auth = getAuth(app)
+
+    const [login,setLogin] = useState<User>({
+        email: ""
+        ,password: ""
+    })
+    const [error,setError] = useState({
+        email: false,
+        password: false
+    })
+
+    const onSubmit = async (e:React.FormEvent)=> {
+        e.preventDefault()
+        const newError = {
+            email: !login.email
+            ,password: !login.password
+        }
+        setError(newError)
+        if(newError.email || newError.password) return
+        try{
+          const loginUser = await signInWithEmailAndPassword(auth, login.email, login.password)
+            console.log(loginUser)
+            alert('로그인 성공!')
+        } catch {
+            alert('이메일 또는 비밀번호가 올바르지 않습니다')
+        }
+    }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <h1 className="mb-2 text-center text-3xl font-bold">
-          QuizNote
-        </h1>
+ <AuthLayout title="QuizNote" span="로그인하고 문제를 생성해보세요">
 
-        <p className="mb-8 text-center text-gray-500">
-          로그인하고 문제를 생성해보세요
-        </p>
-
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={onSubmit}>
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              이메일
-            </label>
 
-            <input
+            <AuthLabel label="이메일" error={error.email} errorMessage="이메일을 입력하세요">
+            <AuthInput
               type="email"
+              error={error.email}
               placeholder="example@email.com"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500"
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setLogin({...login,email:e.target.value})}
             />
+            </AuthLabel>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium">
-              비밀번호
-            </label>
+        <AuthLabel label="비밀번호" error={error.password} errorMessage="비밀번호를 입력하세요">
 
-            <input
+            <AuthInput
               type="password"
               placeholder="비밀번호를 입력하세요"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none transition focus:border-blue-500"
+              error={error.password}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setLogin({...login,password:e.target.value})}
             />
+        </AuthLabel>
           </div>
-
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600"
-          >
-            로그인
-          </button>
+    <AuthButton text="로그인"/>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
-          계정이 없으신가요?
-          <button className="ml-1 font-semibold text-blue-500 hover:underline" onClick={()=>nav('/signup')}>
-            회원가입
-          </button>
-        </div>
-      </div>
-    </div>
+        <AuthSpan text="계정이 없으신가요?" buttonText="회원가입" onClick={()=>nav('/signup')}/>
+</AuthLayout>
   );
 }
 
