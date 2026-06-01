@@ -10,8 +10,6 @@ import AuthLabel from "../components/AuthLabel";
 import { validation } from "../utils/validation";
 import type { User } from "../types/authType";
 
-
-
 function Signup() {
   const nav = useNavigate();
   const auth = getAuth(app);
@@ -31,16 +29,10 @@ function Signup() {
     rePassword: false,
   });
 
-
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newError = validation(userData,rePassword)
-    ;
-
+    const newError = validation(userData, rePassword);
     setError(newError);
-    console.log(error);
-    console.log(userData);
     if (
       newError.email ||
       newError.password ||
@@ -56,10 +48,9 @@ function Signup() {
         userData.email,
         userData.password,
       );
-      console.log(createdUser.user.uid);
-      alert('회원가입 성공!')
-    } catch (error) {
-      console.log(error);
+      alert("회원가입 성공!");
+    } catch (error:any) {
+        error.code == 'auth/email-already-in-use' ? alert('사용중인 이메일 입니다') : alert('알 수 없는 오류입니다')
     }
   };
 
@@ -68,11 +59,13 @@ function Signup() {
       <form className="space-y-4" onSubmit={onSubmit}>
         <div>
           <AuthLabel
+            htmlFor="userName"
             label="이름"
             error={error.userName}
             errorMessage="이름을 입력해주세요"
           >
             <AuthInput
+              id="userName"
               type="text"
               placeholder="이름을 입력하세요"
               error={error.userName}
@@ -85,11 +78,13 @@ function Signup() {
 
         <div>
           <AuthLabel
+            htmlFor="email"
             label="이메일"
             error={error.email}
             errorMessage="이메일을 확인해주세요"
           >
             <AuthInput
+              id="email"
               type="email"
               placeholder="ex@gmail.com"
               error={error.email}
@@ -102,11 +97,13 @@ function Signup() {
 
         <div>
           <AuthLabel
+            htmlFor="password"
             label="비밀번호"
             error={error.password}
             errorMessage="비밀번호를 확인해주세요 (6자리)"
           >
             <AuthInput
+              id="password"
               type="password"
               placeholder="비밀번호를 입력하세요 6자리"
               error={error.password}
@@ -119,11 +116,13 @@ function Signup() {
 
         <div>
           <AuthLabel
+            htmlFor="confirmPassword"
             label="비밀번호 확인"
             error={error.rePassword}
             errorMessage="비밀번호가 다릅니다 (6자리)"
           >
             <AuthInput
+              id="confirmPassword"
               type="password"
               placeholder="비밀번호를 다시 입력하세요"
               error={error.rePassword}
