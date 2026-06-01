@@ -1,8 +1,9 @@
+import type { ReactNode } from "react"
 
 type AuthLayoutProps = {
     title: string
     span: string
-    children: React.ReactNode
+    children: ReactNode
 }
 
 function AuthLayout ({title,span,children}:AuthLayoutProps) {
