@@ -9,11 +9,14 @@ import AuthLayout from "../components/AuthLayout";
 import AuthLabel from "../components/AuthLabel";
 import { validation } from "../utils/validation";
 import type { User } from "../types/authType";
+import { FirebaseError } from "firebase/app";
 
 function Signup() {
   const nav = useNavigate();
   const auth = getAuth(app);
-
+  function isFirebaseError(error: unknown): error is FirebaseError {
+    return error instanceof FirebaseError;
+  }
   const [userData, setUserData] = useState<User>({
     email: "",
     password: "",
@@ -43,14 +46,20 @@ function Signup() {
     }
 
     try {
-      const createdUser = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         userData.email,
         userData.password,
       );
       alert("회원가입 성공!");
-    } catch (error:any) {
-        error.code == 'auth/email-already-in-use' ? alert('사용중인 이메일 입니다') : alert('알 수 없는 오류입니다')
+    } catch (error) {
+      if (isFirebaseError(error)) {
+        if (error.code === "auth/email-already-in-use") {
+          alert("사용중인 이메일 입니다");
+        } else {
+          alert("알 수 없는 오류입니다");
+        }
+      }
     }
   };
 
