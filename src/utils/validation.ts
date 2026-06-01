@@ -6,7 +6,7 @@ export function validation(userData: User, rePassword: string) {
   return {
     email: !userData.email || !emailRegex.test(userData.email),
     password: !userData.password || !passwordRegex.test(userData.password),
-    userName: !userData.userName,
+    userName: !userData.userName?.trim(),
     rePassword: userData.password !== rePassword,
   };
 }
