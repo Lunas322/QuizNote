@@ -32,7 +32,7 @@ function Login() {
     setError(newError);
     if (newError.email || newError.password) return;
     try {
-      const loginUser = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
         login.email,
         login.password,
