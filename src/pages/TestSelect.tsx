@@ -41,9 +41,9 @@ function TestSelect() {
   }, []);
 
 
-  const handelShowMoal = () => setShowModal(!showModal);
+  const handleShowMoal = () => setShowModal(!showModal);
 
-  const handelPostAi = () => {
+  const handlePostAi = () => {
     if (!postData.content || !postData.count) {
       setShowModal(!showModal)
       return
@@ -93,7 +93,7 @@ function TestSelect() {
               </div>
             </div>
             <button className="mt-8 w-full rounded-xl bg-blue-500 py-4 text-lg font-semibold text-white transition hover:bg-blue-600"
-            onClick={handelPostAi}>
+            onClick={handlePostAi}>
               시험 시작하기
             </button>
           </div>
@@ -103,7 +103,7 @@ function TestSelect() {
           <Modal
             title="시험 응시가 불가능합니다"
             text="문제와 문제수를 선택해주세요."
-            onclick={handelShowMoal}
+            onclick={handleShowMoal}
           />
         )}
       </div>
