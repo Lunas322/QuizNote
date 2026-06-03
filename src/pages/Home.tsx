@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
 import Modal from "../components/Modal";
 import NotLogin from "./NotLogin";
+import Loading from "./Loading";
+
 
 function Home() {
   const [content, setContent] = useState("");
+  const [user,setUser] = useState<User| null>(null)
+  const [loading, setLoading] = useState(true)
   const auth = getAuth()
   const [showModal, setShowModal] = useState(false)
 
@@ -17,8 +21,8 @@ function Home() {
     try {
       await addDoc (collection(db,'studyContents'),{
         content:content,
-        createdAt: '',
-        updatedAt:''
+        createdAt: serverTimestamp(),
+        updatedAt:serverTimestamp()
       })
       setContent('')
       handelShowMoal()
@@ -27,7 +31,18 @@ function Home() {
     }
   }
 
-  if(auth.currentUser == null) return <NotLogin/>
+useEffect(() => {
+  console.log("useEffect 실행");
+
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setUser(user)
+    setLoading(false);
+  });
+
+  return unsubscribe;
+}, []);
+  if(loading) return <Loading/>
+  if(user == null) return <NotLogin/>
 
   return (
 <>
