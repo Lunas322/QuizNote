@@ -51,7 +51,7 @@ function Signup() {
         userData.email,
         userData.password,
       );
-      alert("회원가입 성공!");
+      nav('/')
     } catch (error) {
       if (isFirebaseError(error)) {
         if (error.code === "auth/email-already-in-use") {
