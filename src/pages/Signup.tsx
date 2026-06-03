@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { app } from "../firebase/firebase";
 import React, { useState } from "react";
 import AuthInput from "../components/AuthInput";
@@ -46,11 +46,14 @@ function Signup() {
     }
 
     try {
-      await createUserWithEmailAndPassword(
+     const userCredential = await createUserWithEmailAndPassword(
         auth,
         userData.email,
         userData.password,
       );
+      await updateProfile(userCredential.user,{
+        displayName: userData.userName
+      })
       nav('/')
     } catch (error) {
       if (isFirebaseError(error)) {
