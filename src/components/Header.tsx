@@ -5,7 +5,7 @@ import { logout } from "../util/logout";
 function Header() {
   const nav = useNavigate()
   const handelLogout = async ()=>{
-    await logout
+    await logout ()
     nav('/login')
   }
   return (
