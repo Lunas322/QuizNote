@@ -1,9 +1,37 @@
 import { useState } from "react";
+import Header from "../components/Header";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../firebase/firebase";
+import { getAuth } from "firebase/auth";
+import Modal from "../components/Modal";
+import NotLogin from "./NotLogin";
 
 function Home() {
   const [content, setContent] = useState("");
+  const auth = getAuth()
+  const [showModal, setShowModal] = useState(false)
+
+  const handelShowMoal =  ()=> setShowModal(!showModal)
+
+  const addFireStoreAddData = async ()=> {
+    try {
+      await addDoc (collection(db,'studyContents'),{
+        content:content,
+        createdAt: '',
+        updatedAt:''
+      })
+      setContent('')
+      handelShowMoal()
+    }catch(error) {
+      console.log(error)
+    }
+  }
+
+  if(auth.currentUser == null) return <NotLogin/>
 
   return (
+<>
+    <Header/>
     <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 to-gray-100 p-6">
       <div className="w-full max-w-4xl">
         <div className="mb-8 text-center">
@@ -25,28 +53,37 @@ function Home() {
             onChange={(e) => setContent(e.target.value)}
             placeholder="예: React의 useState는 상태를 관리하는 Hook이다..."
             className="h-72 w-full resize-none rounded-2xl border border-gray-200 p-5 text-base outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          />
+            />
 
           <div className="mt-5 flex items-center justify-between">
+            
             <p className="text-sm text-gray-400">
               글자 수: {content.length}
             </p>
+            
 
             <button
               className="rounded-xl bg-blue-500 px-6 py-3 font-semibold text-white transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:bg-gray-300"
               disabled={!content.trim()}
-            >
+              onClick={addFireStoreAddData}
+              >
               문제 생성하기
             </button>
+            
           </div>
         </div>
+        
 
 
         <p className="mt-6 text-center text-sm text-gray-400">
           입력한 내용을 기반으로 시험 문제를 자동 생성합니다
         </p>
       </div>
+
+      {showModal ? <Modal title="저장 완료" text="작성 내용이 성공적으로 저장되었습니다." onclick={()=>handelShowMoal()}/>: null}
+      
     </div>
+              </>
   );
 }
 
