@@ -9,7 +9,7 @@ export async function getExamQuestions(content: string, count: number) {
   const result = await model.generateContent(
     `다음 학습 내용을 기반으로 객관식 문제를 생성해줘.
 조건
-- JSON 배열만 parse 해서 반환 
+- JSON 배열만 반환 설명/마크다운 금지
 - 문제 수: ${count}개
 - 객관식 4지선다
 - 정답 포함
@@ -35,5 +35,9 @@ export async function getExamQuestions(content: string, count: number) {
 ${content}`,
   );
   const text = result.response.text();
-  return JSON.parse(text);
+  const cleaned = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+  return JSON.parse(cleaned);
 }
