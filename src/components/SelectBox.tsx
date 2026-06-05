@@ -26,7 +26,7 @@ function SelectBox({
         name="select-box"
         value={id}
         checked={content === postData.content}
-        onChange={() => setPostData({content: content})}
+        onChange={() => setPostData({content: content,title: title})}
       />
       <span>{title}</span>
     </label>
