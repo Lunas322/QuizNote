@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import SelectBox from "../components/SelectBox";
 import { usePostStore } from "../store/usePostData";
 import CountSelectBox from "../components/CountSelectBox";
 import Modal from "../components/Modal";
+import { getExamQuestions } from "../utils/gemini";
+import type { ExamQuestion } from "../types/examType";
 
 type studyDataType = {
   id: string;
@@ -20,6 +22,7 @@ function TestSelect() {
   const auth = getAuth();
   const [studyData, setStudyData] = useState<studyDataType[]>([]);
   const [showModal,setShowModal] = useState(false)
+  const [question,setQuestion] = useState<ExamQuestion[]>([])
 
   useEffect(() => {
     const getData = async () => {
@@ -43,12 +46,25 @@ function TestSelect() {
 
   const handleShowMoal = () => setShowModal(!showModal);
 
-  const handlePostAi = () => {
-    if (!postData.content || !postData.count) {
-      setShowModal(!showModal)
+  const handlePostAi = async ()=> {
+    if(!postData.content || !postData.count) {
+      setShowModal(true)
       return
-    } console.log('ai전송',postData)
+    }
+    try {
+      const data = await getExamQuestions(postData.content,postData.count)
+      setQuestion(data)
+      console.log(question)
+    } catch (error) {
+      console.error(error)
+    }
   }
+  useEffect(()=>{
+    console.log(question)
+  },[question])
+
+
+
   return (
     <>
       <Header />
@@ -103,7 +119,7 @@ function TestSelect() {
           <Modal
             title="시험 응시가 불가능합니다"
             text="문제와 문제수를 선택해주세요."
-            onclick={handleShowMoal}
+            onclick={()=>handleShowMoal()}
           />
         )}
       </div>
