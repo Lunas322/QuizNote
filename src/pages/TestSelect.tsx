@@ -9,7 +9,7 @@ import CountSelectBox from "../components/CountSelectBox";
 import Modal from "../components/Modal";
 import { getExamQuestions } from "../utils/gemini";
 import type { ExamQuestion } from "../types/examType";
-
+import PostButton from "../components/PostButton";
 type studyDataType = {
   id: string;
   content: string;
@@ -23,6 +23,7 @@ function TestSelect() {
   const [studyData, setStudyData] = useState<studyDataType[]>([]);
   const [showModal,setShowModal] = useState(false)
   const [question,setQuestion] = useState<ExamQuestion[]>([])
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
@@ -44,26 +45,42 @@ function TestSelect() {
   }, []);
 
 
-  const handleShowMoal = () => setShowModal(!showModal);
 
   const handlePostAi = async ()=> {
+    if(loading) return;
     if(!postData.content || !postData.count) {
-      setShowModal(true)
       return
     }
     try {
+      setLoading(true)
       const data = await getExamQuestions(postData.content,postData.count)
       setQuestion(data)
       console.log(question)
     } catch (error) {
       console.error(error)
+      setShowModal(true)
+    }finally{
+      setLoading(false)
+
     }
   }
   useEffect(()=>{
     console.log(question)
+    fireStoreAddExam()
   },[question])
 
-
+ const fireStoreAddExam = async () => {
+    if(!auth.currentUser?.uid) return
+    try{
+      await addDoc(collection(db,"quizzes"),{
+        uid: auth.currentUser?.uid,
+        examData: question,
+        title: postData.title
+      })
+    }catch(error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -108,18 +125,15 @@ function TestSelect() {
                 ))}
               </div>
             </div>
-            <button className="mt-8 w-full rounded-xl bg-blue-500 py-4 text-lg font-semibold text-white transition hover:bg-blue-600"
-            onClick={handlePostAi}>
-              시험 시작하기
-            </button>
+              <PostButton onClick={handlePostAi} loading={loading}/>
           </div>
         </div>
 
         {showModal && (
           <Modal
-            title="시험 응시가 불가능합니다"
-            text="문제와 문제수를 선택해주세요."
-            onclick={()=>handleShowMoal()}
+            title="다음에 다시.."
+            text="오늘의 무료 생성 횟수가 끝났어요"
+            onclick={()=>setShowModal(false)}
           />
         )}
       </div>
