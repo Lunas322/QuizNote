@@ -10,6 +10,7 @@ import Modal from "../components/Modal";
 import { getExamQuestions } from "../utils/gemini";
 import type { ExamQuestion } from "../types/examType";
 import PostButton from "../components/PostButton";
+import { useNavigate } from "react-router-dom";
 type studyDataType = {
   id: string;
   content: string;
@@ -19,6 +20,7 @@ type studyDataType = {
 
 function TestSelect() {
   const postData = usePostStore((state)=> state.postData)
+  const nav = useNavigate()
   const auth = getAuth();
   const [studyData, setStudyData] = useState<studyDataType[]>([]);
   const [showModal,setShowModal] = useState(false)
@@ -61,13 +63,14 @@ function TestSelect() {
       setShowModal(true)
     }finally{
       setLoading(false)
-
+      nav(`/exam/${postData.title}`)
     }
   }
-  useEffect(()=>{
-    console.log(question)
-    fireStoreAddExam()
-  },[question])
+
+useEffect(()=>{
+fireStoreAddExam()
+},[question])
+
 
  const fireStoreAddExam = async () => {
     if(!auth.currentUser?.uid) return
