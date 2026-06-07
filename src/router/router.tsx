@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import TestSelect from "../pages/TestSelect";
+import Exam from "../pages/Exam";
 
 export const router = createBrowserRouter([{
     path: '/login',
@@ -17,5 +18,8 @@ export const router = createBrowserRouter([{
 }, {
     path: '/testselect',
     element: <TestSelect/>
+}, {
+    path: "/exam/:title",
+    element: <Exam/>
 }
 ])
