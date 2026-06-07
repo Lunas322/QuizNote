@@ -3,6 +3,7 @@ import { create } from "zustand";
 type UserAnswer = {
   question: string;
   answer: number;
+  questionIndex: number;
 };
 
 type ResultData = {
