@@ -4,7 +4,7 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import TestSelect from "../pages/TestSelect";
 import Exam from "../pages/Exam";
-import Result from "../pages/result";
+import Result from "../pages/Result";
 
 export const router = createBrowserRouter([{
     path: '/login',
