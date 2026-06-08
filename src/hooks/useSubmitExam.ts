@@ -27,15 +27,21 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
       });
     } catch (error) {
       console.log(error);
+      alert("서버 저장 실패");
     }
   };
 
-  const moveResult = () => {
+  const moveResult = async () => {
     if (!showModal) {
       setShowModal(true);
     } else if (showModal) {
-      fireStoreAddExam();
-      nav(`/result/${resultData.examId}`);
+      try {
+        await fireStoreAddExam();
+        nav(`/result/${resultData.examId}`);
+      } catch (error) {
+        console.error(error);
+        alert("서버 저장 실패");
+      }
     }
   };
   return {
