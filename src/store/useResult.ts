@@ -1,16 +1,5 @@
 import { create } from "zustand";
-
-type UserAnswer = {
-  question: string;
-  answer: number;
-  questionIndex: number;
-};
-
-type ResultData = {
-  examId: string;
-  uid: string;
-  userAnswer: UserAnswer[];
-};
+import type { ResultData } from "../types/resultType";
 
 type ResultStore = {
   resultData: ResultData;
