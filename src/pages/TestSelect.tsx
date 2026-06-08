@@ -49,41 +49,24 @@ function TestSelect() {
 
 
   const handlePostAi = async ()=> {
-    if(loading) return;
-    if(!postData.content || !postData.count) {
-      return
-    }
+    if(loading ||!postData.content || !postData.count || !auth ) return;
     try {
       setLoading(true)
       const data = await getExamQuestions(postData.content,postData.count)
-      setQuestion(data)
-      console.log(question)
+       await addDoc(collection(db,"quizzes"),{
+        uid: auth.currentUser?.uid,
+        examData: data,
+        title: postData.title
+      })
+      nav(`/exam/${postData.title}`)
     } catch (error) {
       console.error(error)
       setShowModal(true)
     }finally{
       setLoading(false)
-      nav(`/exam/${postData.title}`)
     }
   }
 
-useEffect(()=>{
-fireStoreAddExam()
-},[question])
-
-
- const fireStoreAddExam = async () => {
-    if(!auth.currentUser?.uid) return
-    try{
-      await addDoc(collection(db,"quizzes"),{
-        uid: auth.currentUser?.uid,
-        examData: question,
-        title: postData.title
-      })
-    }catch(error) {
-      console.log(error)
-    }
-  }
 
   return (
     <>
