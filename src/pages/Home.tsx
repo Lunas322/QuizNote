@@ -110,6 +110,7 @@ function Home() {
 
         {showModal && (
           <Modal
+            otherButton={false}
             title="저장 완료"
             text="작성 내용이 성공적으로 저장되었습니다."
             onclick={handelShowMoal}
