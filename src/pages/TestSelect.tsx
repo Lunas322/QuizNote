@@ -134,6 +134,7 @@ fireStoreAddExam()
 
         {showModal && (
           <Modal
+          otherButton={false}
             title="다음에 다시.."
             text="오늘의 무료 생성 횟수가 끝났어요"
             onclick={()=>setShowModal(false)}

@@ -3,9 +3,11 @@ type ModalProps = {
     title: string
     text: string
     onclick: ()=>void
+    onclickotherButton?: ()=>void
+    otherButton: boolean
 }
 
-function Modal({ title, text, onclick }: ModalProps) {
+function Modal({ title, text, onclick, onclickotherButton,otherButton }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
@@ -24,12 +26,22 @@ function Modal({ title, text, onclick }: ModalProps) {
           {text}
         </p>
 
+    <div className="flex gap-2">
         <button
           className="w-full rounded-xl bg-blue-500 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-600"
           onClick={onclick}
         >
           확인
         </button>
+        {otherButton ? 
+                <button
+          className="w-full rounded-xl bg-red-500 py-3 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-600"
+          onClick={onclickotherButton}
+        >
+          취소
+        </button> : null
+}
+    </div>
       </div>
     </div>
   );
