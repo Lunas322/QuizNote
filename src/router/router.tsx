@@ -5,6 +5,8 @@ import Home from "../pages/Home";
 import TestSelect from "../pages/TestSelect";
 import Exam from "../pages/Exam";
 import Result from "../pages/Result";
+import ResultList from "../pages/ResultList";
+import ResultDetail from "../pages/ResultDetail";
 
 export const router = createBrowserRouter([{
     path: '/login',
@@ -23,7 +25,13 @@ export const router = createBrowserRouter([{
     path: "/exam/:title",
     element: <Exam/>
 },  {
-    path: "result/:id",
+    path: "/result/:examId",
     element:<Result/>
+}, {
+    path: "/resultList",
+    element:<ResultList/>
+}, {
+    path: "resultList/:id",
+    element: <ResultDetail/>
 }
 ])
