@@ -12,6 +12,7 @@ import ExamButton from "../components/ExamButton";
 import { useQuestion } from "../hooks/useQuestion";
 import { useAnswer } from "../hooks/useAnswer";
 import { useSubmitExam } from "../hooks/useSubmitExam";
+import NotLogin from "./NotLogin";
 
 function Exam() {
   const { title } = useParams();
@@ -22,6 +23,7 @@ function Exam() {
   const auth = getAuth();
   const resultData = useResultStore((state) => state.resultData);
   const setResultData = useResultStore((State) => State.setResultData);
+  const resetResultData = useResultStore((state)=> state.resetResultData)
   const selectedQuestion = exam[0]?.examData[questionCount - 1];
   const { currentAnswer, handleSelect } = useAnswer({
     setResultData,
@@ -35,8 +37,9 @@ function Exam() {
   });
 
   useEffect(()=>{
-    console.log(resultData)
-  },[resultData])
+    resetResultData()
+  },[])
+
 
   useEffect(() => {
     if (!exam[0]) return;
@@ -52,7 +55,7 @@ function Exam() {
     moveResult,
     nextQuestionCount,
   };
-
+  if(!auth.currentUser) return <NotLogin/>
   if (loading) return <Loading />;
 
   return (
