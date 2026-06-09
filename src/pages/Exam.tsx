@@ -34,6 +34,10 @@ function Exam() {
     resultData,
   });
 
+  useEffect(()=>{
+    console.log(resultData)
+  },[resultData])
+
   useEffect(() => {
     if (!exam[0]) return;
     setResultData({
@@ -41,7 +45,7 @@ function Exam() {
       examId: exam[0].id,
       title: title,
     });
-  }, [title]);
+  }, [title,exam]);
 
   const functions = {
     beforeQuestionCount,
