@@ -49,12 +49,12 @@ function TestSelect() {
 
 
   const handlePostAi = async ()=> {
-    if(loading ||!postData.content || !postData.count || !auth ) return;
+    if(loading ||!postData.content || !postData.count || !auth.currentUser) return;
     try {
       setLoading(true)
       const data = await getExamQuestions(postData.content,postData.count)
        await addDoc(collection(db,"quizzes"),{
-        uid: auth.currentUser?.uid,
+        uid: auth.currentUser.uid,
         examData: data,
         title: postData.title
       })
