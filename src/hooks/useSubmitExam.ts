@@ -1,5 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
         title: title,
         examId: resultData.examId,
         userAnswer: resultData.userAnswer,
+        createdAt: serverTimestamp(),
       });
     } catch (error) {
       console.log(error);
