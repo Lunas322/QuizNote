@@ -5,6 +5,7 @@ type useAnswerType = {
   resultData: ResultData;
   questionCount: number;
   selectedQuestion?: ExamData;
+
   setResultData: (data: Partial<ResultData>) => void;
 };
 
@@ -46,6 +47,10 @@ export function useAnswer({
             answer: answerIndex,
             question: selectedQuestion.question,
             questionIndex: questionCount - 1,
+            correctAnswer: selectedQuestion.answer,
+            explanation: selectedQuestion.explanation,
+            selectedOption: selectedQuestion.options[answerIndex],
+            correctOption: selectedQuestion.options[selectedQuestion.answer],
           },
         ],
       });
