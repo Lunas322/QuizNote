@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { getAuth } from "firebase/auth";
 import SelectBox from "../components/SelectBox";
 import { usePostStore } from "../store/usePostData";
 import CountSelectBox from "../components/CountSelectBox";
 import Modal from "../components/Modal";
-
+import { getExamQuestions } from "../utils/gemini";
+import type { ExamQuestion } from "../types/examType";
+import PostButton from "../components/PostButton";
+import { useNavigate } from "react-router-dom";
 type studyDataType = {
   id: string;
   content: string;
@@ -17,9 +20,12 @@ type studyDataType = {
 
 function TestSelect() {
   const postData = usePostStore((state)=> state.postData)
+  const nav = useNavigate()
   const auth = getAuth();
   const [studyData, setStudyData] = useState<studyDataType[]>([]);
   const [showModal,setShowModal] = useState(false)
+  const [question,setQuestion] = useState<ExamQuestion[]>([])
+  const [loading,setLoading] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
@@ -41,14 +47,27 @@ function TestSelect() {
   }, []);
 
 
-  const handleShowMoal = () => setShowModal(!showModal);
 
-  const handlePostAi = () => {
-    if (!postData.content || !postData.count) {
-      setShowModal(!showModal)
-      return
-    } console.log('ai전송',postData)
+  const handlePostAi = async ()=> {
+    if(loading ||!postData.content || !postData.count || !auth.currentUser) return;
+    try {
+      setLoading(true)
+      const data = await getExamQuestions(postData.content,postData.count)
+       await addDoc(collection(db,"quizzes"),{
+        uid: auth.currentUser.uid,
+        examData: data,
+        title: postData.title
+      })
+      nav(`/exam/${postData.title}`)
+    } catch (error) {
+      console.error(error)
+      setShowModal(true)
+    }finally{
+      setLoading(false)
+    }
   }
+
+
   return (
     <>
       <Header />
@@ -92,18 +111,16 @@ function TestSelect() {
                 ))}
               </div>
             </div>
-            <button className="mt-8 w-full rounded-xl bg-blue-500 py-4 text-lg font-semibold text-white transition hover:bg-blue-600"
-            onClick={handlePostAi}>
-              시험 시작하기
-            </button>
+              <PostButton onClick={handlePostAi} loading={loading}/>
           </div>
         </div>
 
         {showModal && (
           <Modal
-            title="시험 응시가 불가능합니다"
-            text="문제와 문제수를 선택해주세요."
-            onclick={handleShowMoal}
+          otherButton={false}
+            title="다음에 다시.."
+            text="오늘의 무료 생성 횟수가 끝났어요"
+            onclick={()=>setShowModal(false)}
           />
         )}
       </div>
