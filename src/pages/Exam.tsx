@@ -12,6 +12,8 @@ import ExamButton from "../components/ExamButton";
 import { useQuestion } from "../hooks/useQuestion";
 import { useAnswer } from "../hooks/useAnswer";
 import { useSubmitExam } from "../hooks/useSubmitExam";
+import AuthGuard from "../components/AuthGuard";
+import { useAuth } from "../hooks/useAuth";
 
 function Exam() {
   const { title } = useParams();
@@ -19,9 +21,10 @@ function Exam() {
   const maxCount = exam[0]?.examData.length;
   const { questionCount, beforeQuestionCount, nextQuestionCount } =
     useQuestion(maxCount);
-  const auth = getAuth();
+  const {user} = useAuth()
   const resultData = useResultStore((state) => state.resultData);
   const setResultData = useResultStore((State) => State.setResultData);
+  const resetResultData = useResultStore((state)=> state.resetResultData)
   const selectedQuestion = exam[0]?.examData[questionCount - 1];
   const { currentAnswer, handleSelect } = useAnswer({
     setResultData,
@@ -34,24 +37,29 @@ function Exam() {
     resultData,
   });
 
+  useEffect(()=>{
+    resetResultData()
+  },[])
+
+
   useEffect(() => {
-    if (!exam[0]) return;
+    if (!exam[0] || !user?.uid) return;
     setResultData({
-      uid: auth.currentUser?.uid,
+      uid: user.uid,
       examId: exam[0].id,
       title: title,
     });
-  }, [title]);
+  }, [title,exam,setResultData,user?.uid]);
 
   const functions = {
     beforeQuestionCount,
     moveResult,
     nextQuestionCount,
   };
-
   if (loading) return <Loading />;
 
   return (
+    <AuthGuard>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 text-center">
@@ -98,6 +106,7 @@ function Exam() {
         />
       ) : null}
     </div>
+    </AuthGuard>
   );
 }
 
