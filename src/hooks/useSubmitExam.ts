@@ -17,19 +17,17 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
   const [showModal, setShowModal] = useState(false);
 
   const fireStoreAddExam = async () => {
-    if (!auth.currentUser?.uid) return;
-    try {
-      await addDoc(collection(db, "userAnswer"), {
-        uid: auth.currentUser.uid,
-        title: title,
-        examId: resultData.examId,
-        userAnswer: resultData.userAnswer,
-        createdAt: serverTimestamp(),
-      });
-    } catch (error) {
-      console.log(error);
-      alert("서버 저장 실패");
+    if (!auth.currentUser?.uid) {
+      throw new Error("로그인이 필요합니다");
     }
+
+    await addDoc(collection(db, "userAnswer"), {
+      uid: auth.currentUser.uid,
+      title,
+      examId: resultData.examId,
+      userAnswer: resultData.userAnswer,
+      createdAt: serverTimestamp(),
+    });
   };
 
   const moveResult = async () => {
@@ -41,7 +39,7 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
         nav(`/result/${resultData.examId}`);
       } catch (error) {
         console.error(error);
-        alert("서버 저장 실패");
+        alert(error instanceof Error ? error.message : "서버 저장 실패");
       }
     }
   };
