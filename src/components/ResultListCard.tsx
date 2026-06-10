@@ -32,7 +32,7 @@ function ResultListCard ({id,title,createdAt,score}:ResultListCardProps) {
               </div>
 
               <button
-                onClick={() => nav(`/resultlist/${id}`)}
+                onClick={() => nav(`/resultList/${id}`)}
                 className="rounded-xl bg-blue-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
                 >
                 결과 보기
