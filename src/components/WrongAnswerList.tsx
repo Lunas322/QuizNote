@@ -22,6 +22,7 @@ function WrongAnswerList ({wrongAnswers}:WrongAnswerListProps) {
             <div className="space-y-5">
               {wrongAnswers.map((data, index) => (
                 <AnswerCard
+                  key={data.question}
                   type="wrong"
                   correctOption={data.correctOption}
                   question={data.question}
