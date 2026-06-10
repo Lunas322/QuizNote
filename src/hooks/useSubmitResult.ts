@@ -24,9 +24,9 @@ export function useSubmitResult({
   const { score } = calculateResultScore({ correctAnswers, wrongAnswers });
 
   const fireStoreAddResult = async () => {
-    console.log("1");
-    if (!auth.currentUser?.uid) return;
-    console.log("2");
+    if (!auth.currentUser?.uid) {
+      throw new Error("로그인이 필요합니다");
+    }
     try {
       await addDoc(collection(db, "result"), {
         uid: auth.currentUser.uid,
@@ -50,7 +50,7 @@ export function useSubmitResult({
       nav("/");
     } catch (error) {
       console.error(error);
-      alert("서버 저장 실패");
+      alert(error instanceof Error ? error.message : "서버 저장 실패");
     }
   };
   return {
