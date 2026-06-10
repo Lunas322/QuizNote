@@ -34,6 +34,7 @@ export function useAnswer({
             ? {
                 ...item,
                 answer: answerIndex,
+                selectedOption: selectedQuestion.options[answerIndex],
               }
             : item,
         ),
