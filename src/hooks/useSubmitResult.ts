@@ -3,6 +3,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import type { UserAnswer } from "../types/resultType";
+import { calculateResultScore } from "../utils/calculateResultScore";
 
 type UseSubmitResultProps = {
   examId: string;
@@ -19,11 +20,9 @@ export function useSubmitResult({
 }: UseSubmitResultProps) {
   const nav = useNavigate();
   const auth = getAuth();
-  const totalQuestions = correctAnswers.length + wrongAnswers.length;
-  const score =
-    totalQuestions === 0
-      ? 0
-      : Math.round((correctAnswers.length / totalQuestions) * 100);
+
+  const { score } = calculateResultScore({ correctAnswers, wrongAnswers });
+
   const fireStoreAddResult = async () => {
     console.log("1");
     if (!auth.currentUser?.uid) return;
@@ -45,9 +44,14 @@ export function useSubmitResult({
   };
 
   const moveHome = async () => {
-    console.log("실행");
-    await fireStoreAddResult();
-    nav("/");
+    try {
+      console.log("실행");
+      await fireStoreAddResult();
+      nav("/");
+    } catch (error) {
+      console.error(error);
+      alert("서버 저장 실패");
+    }
   };
   return {
     moveHome,
