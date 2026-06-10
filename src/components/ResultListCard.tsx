@@ -12,7 +12,6 @@ function ResultListCard ({id,title,createdAt,score}:ResultListCardProps) {
     const nav = useNavigate()
     return(
              <div
-              key={id}
               className="flex items-center justify-between rounded-2xl bg-white p-6 shadow-md transition hover:-translate-y-1 hover:shadow-xl"
               >
               <div className="flex flex-col gap-1">
