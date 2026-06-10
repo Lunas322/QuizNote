@@ -13,6 +13,7 @@ import { useQuestion } from "../hooks/useQuestion";
 import { useAnswer } from "../hooks/useAnswer";
 import { useSubmitExam } from "../hooks/useSubmitExam";
 import AuthGuard from "../components/AuthGuard";
+import { useAuth } from "../hooks/useAuth";
 
 function Exam() {
   const { title } = useParams();
@@ -20,7 +21,7 @@ function Exam() {
   const maxCount = exam[0]?.examData.length;
   const { questionCount, beforeQuestionCount, nextQuestionCount } =
     useQuestion(maxCount);
-  const auth = getAuth();
+  const {user} = useAuth()
   const resultData = useResultStore((state) => state.resultData);
   const setResultData = useResultStore((State) => State.setResultData);
   const resetResultData = useResultStore((state)=> state.resetResultData)
@@ -42,13 +43,13 @@ function Exam() {
 
 
   useEffect(() => {
-    if (!exam[0]) return;
+    if (!exam[0] || !user?.uid) return;
     setResultData({
-      uid: auth.currentUser?.uid,
+      uid: user.uid,
       examId: exam[0].id,
       title: title,
     });
-  }, [title,exam]);
+  }, [title,exam,setResultData,user?.uid]);
 
   const functions = {
     beforeQuestionCount,
