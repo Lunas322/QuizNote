@@ -14,7 +14,9 @@ export function useResultDetail(id: string) {
     if (!id) return;
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
+      if (!user) {
+        return setResultDetail(null);
+      }
 
       setLoading(true);
 

@@ -21,7 +21,9 @@ export function useResult(examId: string) {
     if (!examId) return;
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
+      if (!user) {
+        return setResult(null);
+      }
 
       setLoading(true);
 

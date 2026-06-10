@@ -12,7 +12,9 @@ export function useResultList() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
+      if (!user) {
+        return setResultList([]);
+      }
 
       setLoading(true);
 
