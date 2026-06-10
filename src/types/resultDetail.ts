@@ -3,7 +3,7 @@ import type { UserAnswer } from "./resultType";
 
 export type ResultDetail = {
   correctAnswers: UserAnswer[];
-  worngAnswers: UserAnswer[];
+  wrongAnswers: UserAnswer[];
   createdAt: Timestamp;
 
   examId: string;

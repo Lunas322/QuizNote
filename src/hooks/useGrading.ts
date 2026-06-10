@@ -7,15 +7,15 @@ export function useGreading({ result }: UseGreading) {
   if (!result) {
     return {
       correctAnswers: [],
-      worngAnswers: [],
+      wrongAnswers: [],
     };
   }
 
   const correctAnswers = result.userAnswer.filter((data) => {
     return data.answer == data.correctAnswer;
   });
-  const worngAnswers = result.userAnswer.filter((data) => {
+  const wrongAnswers = result.userAnswer.filter((data) => {
     return data.answer !== data.correctAnswer;
   });
-  return { correctAnswers, worngAnswers };
+  return { correctAnswers, wrongAnswers };
 }

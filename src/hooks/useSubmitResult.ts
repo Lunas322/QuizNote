@@ -7,19 +7,19 @@ import type { UserAnswer } from "../types/resultType";
 type UseSubmitResultProps = {
   examId: string;
   correctAnswers: UserAnswer[];
-  worngAnswers: UserAnswer[];
+  wrongAnswers: UserAnswer[];
   title: string;
 };
 
 export function useSubmitResult({
   examId,
   correctAnswers,
-  worngAnswers,
+  wrongAnswers,
   title,
 }: UseSubmitResultProps) {
   const nav = useNavigate();
   const auth = getAuth();
-  const totalQuestions = correctAnswers.length + worngAnswers.length;
+  const totalQuestions = correctAnswers.length + wrongAnswers.length;
   const score =
     totalQuestions === 0
       ? 0
@@ -34,7 +34,7 @@ export function useSubmitResult({
         title: title,
         examId: examId,
         correctAnswers: correctAnswers,
-        worngAnswers: worngAnswers,
+        wrongAnswers: wrongAnswers,
         createdAt: serverTimestamp(),
         score: score,
       });
