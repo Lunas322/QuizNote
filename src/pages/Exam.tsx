@@ -12,7 +12,7 @@ import ExamButton from "../components/ExamButton";
 import { useQuestion } from "../hooks/useQuestion";
 import { useAnswer } from "../hooks/useAnswer";
 import { useSubmitExam } from "../hooks/useSubmitExam";
-import NotLogin from "./NotLogin";
+import AuthGuard from "../components/AuthGuard";
 
 function Exam() {
   const { title } = useParams();
@@ -55,10 +55,10 @@ function Exam() {
     moveResult,
     nextQuestionCount,
   };
-  if(!auth.currentUser) return <NotLogin/>
   if (loading) return <Loading />;
 
   return (
+    <AuthGuard>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 text-center">
@@ -105,6 +105,7 @@ function Exam() {
         />
       ) : null}
     </div>
+    </AuthGuard>
   );
 }
 
