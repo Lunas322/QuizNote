@@ -12,7 +12,9 @@ import Loading from "./Loading";
 function TestSelect() {
   const [showModal,setShowModal] = useState(false)
   const {loading,studyData} = useSelectExam()
-  const {handlePostAi,buttonLoading} = useGetExam({setShowModal,loading})
+  const [modalTitle,setModalTitle] = useState("")
+  const [modalText,setModalText] = useState("")
+  const {handlePostAi,buttonLoading} = useGetExam({setShowModal,loading,setModalText,setModalTitle})
 
   if (loading) return <Loading/>
 
@@ -66,8 +68,8 @@ function TestSelect() {
         {showModal && (
           <Modal
           otherButton={false}
-            title="다음에 다시.."
-            text="오늘의 무료 생성 횟수가 끝났어요"
+            title={modalTitle}
+            text={modalText}
             onclick={()=>setShowModal(false)}
           />
         )}
