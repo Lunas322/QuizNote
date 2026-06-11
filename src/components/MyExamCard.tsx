@@ -4,18 +4,19 @@ import { useNavigate } from "react-router-dom";
 type MyExamCardProps = {
   id: string;
   title: string;
-  createdAt: Timestamp;
+  createdAt: Timestamp | null | undefined
 };
 
 function MyExamCard({ id, title, createdAt }: MyExamCardProps) {
   const nav = useNavigate();
+  const formattedDate = createdAt?.toDate()?.toLocaleDateString() ?? '날짜 정보가 없습니다'
   return (
     <div className="flex items-center justify-between rounded-2xl border border-gray-100 p-5 transition hover:bg-gray-50">
       <div>
         <h3 className="font-bold text-gray-800">{title}</h3>
 
         <p className="text-sm text-gray-500">
-          {createdAt?.toDate().toLocaleDateString()}
+          {formattedDate}
         </p>
       </div>
 

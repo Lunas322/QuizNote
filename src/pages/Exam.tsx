@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
-import { getAuth } from "firebase/auth";
 import { useResultStore } from "../store/useResult";
 import Modal from "../components/Modal";
 import ProgressBar from "../components/ProgressBar";
@@ -18,7 +17,7 @@ import { useAuth } from "../hooks/useAuth";
 function Exam() {
   const { title } = useParams();
   const { exam, loading } = useExam(title ?? "");
-  const maxCount = exam[0]?.examData.length;
+  const maxCount = exam[0]?.examData.length ?? 0;
   const { questionCount, beforeQuestionCount, nextQuestionCount } =
     useQuestion(maxCount);
   const {user} = useAuth()
@@ -32,7 +31,7 @@ function Exam() {
     questionCount,
     resultData,
   });
-  const { moveResult, showModal, setShowModal } = useSubmitExam({
+  const { moveResult, showModal, setShowModal,submitting } = useSubmitExam({
     title,
     resultData,
   });
@@ -98,8 +97,9 @@ function Exam() {
       </div>
       {showModal ? (
         <Modal
+          loading={submitting}
           title="제출하기"
-          text="제출하면 더이상 수정 할 수 없습니다 "
+          text="제출하면 더 이상 수정할 수 없습니다."
           onclick={() => moveResult()}
           otherButton={true}
           onclickotherButton={() => setShowModal(false)}

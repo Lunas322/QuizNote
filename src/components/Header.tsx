@@ -4,7 +4,7 @@ import { logout } from "../util/logout";
 
 function Header() {
   const nav = useNavigate()
-  const handelLogout = async ()=>{
+  const handleLogout = async ()=>{
     await logout ()
     nav('/login')
   }
@@ -25,7 +25,7 @@ function Header() {
 
         <div>
           <button className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
-          onClick={()=>handelLogout()}>
+          onClick={()=>handleLogout()}>
             로그아웃
           </button>
         </div>

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useResult } from "../hooks/useResult";
-import { useGreading } from "../hooks/useGrading";
+import { useGrading } from "../hooks/useGrading";
 import Loading from "./Loading";
 import { useSubmitResult } from "../hooks/useSubmitResult";
 import Score from "../components/Score";
@@ -13,7 +13,7 @@ function Result() {
   const { examId } = useParams();
   const nav = useNavigate();
   const { result, loading } = useResult(examId ?? "");
-  const { correctAnswers, wrongAnswers } = useGreading({ result });
+  const { correctAnswers, wrongAnswers } = useGrading({ result });
   const title = result?.title;
   const { moveHome } = useSubmitResult({
     examId: examId ?? "",

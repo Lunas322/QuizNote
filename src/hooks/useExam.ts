@@ -29,7 +29,6 @@ export function useExam(title: string) {
           id: doc.id,
           ...(doc.data() as Omit<ExamQuestion, "id">),
         }));
-        console.log(data);
         setExam(data);
       } catch (error) {
         console.error(error);
