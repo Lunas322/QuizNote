@@ -32,7 +32,7 @@ function Exam() {
     questionCount,
     resultData,
   });
-  const { moveResult, showModal, setShowModal } = useSubmitExam({
+  const { moveResult, showModal, setShowModal,submitting } = useSubmitExam({
     title,
     resultData,
   });
@@ -98,6 +98,7 @@ function Exam() {
       </div>
       {showModal ? (
         <Modal
+          loading={submitting}
           title="제출하기"
           text="제출하면 더이상 수정 할 수 없습니다 "
           onclick={() => moveResult()}

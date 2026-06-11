@@ -4,6 +4,7 @@ import { db } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import type { UserAnswer } from "../types/resultType";
 import { calculateResultScore } from "../utils/calculateResultScore";
+import { useState } from "react";
 
 type UseSubmitResultProps = {
   examId: string;
@@ -20,6 +21,7 @@ export function useSubmitResult({
 }: UseSubmitResultProps) {
   const nav = useNavigate();
   const auth = getAuth();
+  const [submitting, setSubmitting] = useState(false);
 
   const { score } = calculateResultScore({ correctAnswers, wrongAnswers });
 
@@ -44,13 +46,17 @@ export function useSubmitResult({
   };
 
   const moveHome = async () => {
+    if (submitting) return;
     try {
+      setSubmitting(true);
       console.log("실행");
       await fireStoreAddResult();
       nav("/");
     } catch (error) {
       console.error(error);
       alert(error instanceof Error ? error.message : "서버 저장 실패");
+    } finally {
+      setSubmitting(false);
     }
   };
   return {

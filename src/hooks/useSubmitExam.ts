@@ -11,6 +11,7 @@ type UseSubmitExamProps = {
 };
 
 export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
+  const [submitting, setSubmitting] = useState(false);
   const nav = useNavigate();
   const auth = getAuth();
 
@@ -35,11 +36,14 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
       setShowModal(true);
     } else if (showModal) {
       try {
+        setSubmitting(true);
         await fireStoreAddExam();
         nav(`/result/${resultData.examId}`);
       } catch (error) {
         console.error(error);
         alert(error instanceof Error ? error.message : "서버 저장 실패");
+      } finally {
+        setSubmitting(false);
       }
     }
   };
@@ -47,5 +51,6 @@ export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
     moveResult,
     showModal,
     setShowModal,
+    submitting,
   };
 }
