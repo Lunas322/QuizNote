@@ -49,7 +49,6 @@ export function useSubmitResult({
     if (submitting) return;
     try {
       setSubmitting(true);
-      console.log("실행");
       await fireStoreAddResult();
       nav("/");
     } catch (error) {
