@@ -1,9 +1,9 @@
 import type { ResultData } from "../types/resultType";
 
-type UseGreading = {
+type UseGrading = {
   result: ResultData | null;
 };
-export function useGreading({ result }: UseGreading) {
+export function useGrading({ result }: UseGrading) {
   if (!result) {
     return {
       correctAnswers: [],

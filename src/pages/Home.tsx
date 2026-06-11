@@ -16,7 +16,7 @@ function Home() {
 
   const auth = getAuth();
 
-  const handelShowMoal = () => setShowModal(!showModal);
+  const handleShowMoal = () => setShowModal(!showModal);
 
   const addFireStoreAddData = async () => {
     try {
@@ -30,7 +30,7 @@ function Home() {
 
       setTitle("");
       setContent("");
-      handelShowMoal();
+      handleShowMoal();
     } catch (error) {
       console.log(error);
     }
@@ -113,7 +113,7 @@ function Home() {
             otherButton={false}
             title="저장 완료"
             text="작성 내용이 성공적으로 저장되었습니다."
-            onclick={handelShowMoal}
+            onclick={handleShowMoal}
           />
         )}
       </div>

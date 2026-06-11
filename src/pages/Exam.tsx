@@ -99,7 +99,7 @@ function Exam() {
         <Modal
           loading={submitting}
           title="제출하기"
-          text="제출하면 더이상 수정 할 수 없습니다 "
+          text="제출하면 더 이상 수정할 수 없습니다."
           onclick={() => moveResult()}
           otherButton={true}
           onclickotherButton={() => setShowModal(false)}

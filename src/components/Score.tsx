@@ -1,8 +1,8 @@
-type ScroeProps = {
+type ScoreProps = {
     score: number
 }
 
-function Score ({score}:ScroeProps) {
+function Score ({score}:ScoreProps) {
     return(
              <div className="rounded-3xl border border-gray-100 bg-white p-10 text-center shadow-xl">
           <div className="mb-2 text-sm font-semibold tracking-widest text-gray-400 uppercase">
