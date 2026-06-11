@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 type MyExamCardProps = {
   id: string;
   title: string;
-  createdAt: Timestamp;
+  createdAt: Timestamp | null | undefined
 };
 
 function MyExamCard({ id, title, createdAt }: MyExamCardProps) {
