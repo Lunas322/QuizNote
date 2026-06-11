@@ -78,6 +78,7 @@ function Exam() {
           <div className="space-y-4">
             {selectedQuestion?.options.map((option, index) => (
               <AnswerBox
+                key={index}
                 onChange={() => handleSelect(index)}
                 option={option}
                 index={index}
