@@ -25,7 +25,13 @@ export function useGetExam({
   const nav = useNavigate();
 
   const handlePostAi = async () => {
-    if (loading || !postData.content || !postData.count || !auth.currentUser) {
+    if (
+      loading ||
+      !postData.content ||
+      !postData.title.trim() ||
+      !postData.count ||
+      !auth.currentUser
+    ) {
       return;
     }
 
