@@ -20,7 +20,7 @@ function Header() {
           <div className="cursor-pointer transition hover:text-blue-500" onClick={()=>nav('/')}>문제 생성</div>
           <div className="cursor-pointer transition hover:text-blue-500" onClick={()=>nav('/testselect')}>문제 풀이</div>
           <div className="cursor-pointer transition hover:text-blue-500" onClick={()=>nav('/resultList')}>결과</div>
-          <div className="cursor-pointer transition hover:text-blue-500">마이페이지</div>
+          <div className="cursor-pointer transition hover:text-blue-500" onClick={()=>nav('/my')}>마이페이지</div>
         </div>
 
         <div>
