@@ -1,9 +1,7 @@
 import { useResultList } from "../hooks/useResultList";
 import Header from "../components/Header";
-import { useAuth } from "../hooks/useAuth";
 import { calculateAverageScore } from "../utils/calculateAverageScore";
 import { calculateTotalQuestionCount } from "../utils/calculateTotalQuestionCount";
-import { useEffect } from "react";
 import MyExamCard from "../components/MyExamCard";
 import UserResultSummary from "../components/UserResultSummary";
 import Loading from "./Loading";
@@ -14,7 +12,6 @@ function MyPage() {
   const { resultList, loading } = useResultList();
   const score = calculateAverageScore(resultList);
   const totalQuestionCount = calculateTotalQuestionCount(resultList);
-
 
   if (loading) return <Loading />;
   return (
@@ -38,8 +35,8 @@ function MyPage() {
               <div className="space-y-4">
                 {resultList.map((data) => (
                   <MyExamCard
-                    key={data.uid}
-                    examId={data.examId}
+                    key={data.id}
+                    id={data.id}
                     title={data.title ?? ""}
                     createdAt={data.createdAt}
                   />
