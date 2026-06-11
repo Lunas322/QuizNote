@@ -5,8 +5,9 @@ export type ResultListData = {
   examId: string;
   uid: string;
   title?: string;
-  userAnswer: UserAnswer[];
   createdAt: Timestamp;
   score: number;
   id: string;
+  correctAnswers: UserAnswer[];
+  wrongAnswers: UserAnswer[];
 };

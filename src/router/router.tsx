@@ -7,6 +7,7 @@ import Exam from "../pages/Exam";
 import Result from "../pages/Result";
 import ResultList from "../pages/ResultList";
 import ResultDetail from "../pages/ResultDetail";
+import MyPage from "../pages/MyPage";
 
 export const router = createBrowserRouter([{
     path: '/login',
@@ -31,7 +32,10 @@ export const router = createBrowserRouter([{
     path: "/resultList",
     element:<ResultList/>
 }, {
-    path: "resultList/:id",
+    path: "/resultList/:id",
     element: <ResultDetail/>
+}, {
+    path: "/my",
+    element: <MyPage/>
 }
 ])
