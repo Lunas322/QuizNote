@@ -1,74 +1,86 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
 # QuizNote
+
+AI가 생성한 문제를 풀고, 결과를 분석할 수 있는 퀴즈 학습 서비스입니다.
+
+## 📌 프로젝트 소개
+
+QuizNote는 사용자가 원하는 주제를 입력하면 Gemini AI가 문제를 생성하고, 생성된 문제를 시험 형식으로 풀어 결과를 저장 및 분석할 수 있는 서비스입니다.
+
+사용자는 자신의 학습 결과를 확인하고, 마이페이지에서 시험 통계를 조회할 수 있습니다.
+
+---
+
+## 🛠 기술 스택
+
+### Frontend
+
+- React
+- TypeScript
+- React Router
+- Zustand
+- Tailwind CSS
+
+### Backend / DB
+
+- Firebase Authentication
+- Firestore Database
+
+### AI
+
+- Gemini API
+
+---
+
+## ✨ 주요 기능
+
+### 🔐 회원가입 / 로그인
+
+- Firebase Authentication 기반 인증
+- 로그인 상태 유지
+- 인증 페이지 접근 제어(AuthGuard)
+
+### 📝 문제 생성
+
+- Gemini API를 활용한 문제 생성
+- 문제 수 선택 가능
+- 사용자 입력 기반 문제 생성
+
+### 🎯 시험 응시
+
+- 객관식 문제 풀이
+- 답안 선택
+- 진행 상태 관리
+
+### 📊 시험 결과
+
+- 점수 계산
+- 정답 / 오답 분석
+- 결과 저장
+
+### 📚 결과 이력 조회
+
+- 이전 시험 결과 목록 확인
+- 상세 결과 조회
+
+### 👤 마이페이지
+
+- 사용자 정보 조회
+- 평균 점수 확인
+- 총 응시 문제 수 확인
+- 생성한 시험 목록 확인
+
+---
+
+## 📂 프로젝트 구조
+
+```bash
+src
+├── components
+├── hooks
+├── pages
+├── store
+├── types
+├── utils
+├── firebase
+└── router
+```
