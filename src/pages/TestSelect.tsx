@@ -1,75 +1,24 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "../components/Header";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../firebase/firebase";
-import { getAuth } from "firebase/auth";
 import SelectBox from "../components/SelectBox";
-import { usePostStore } from "../store/usePostData";
 import CountSelectBox from "../components/CountSelectBox";
 import Modal from "../components/Modal";
-import { getExamQuestions } from "../utils/gemini";
-import type { ExamQuestion } from "../types/examType";
 import PostButton from "../components/PostButton";
-import { useNavigate } from "react-router-dom";
-type studyDataType = {
-  id: string;
-  content: string;
-  title: string;
-  uid: string;
-};
+import AuthGuard from "../components/AuthGuard";
+import { useSelectExam } from "../hooks/useSelectExam";
+import { useGetExam } from "../hooks/useGetExam";
+import Loading from "./Loading";
 
 function TestSelect() {
-  const postData = usePostStore((state)=> state.postData)
-  const nav = useNavigate()
-  const auth = getAuth();
-  const [studyData, setStudyData] = useState<studyDataType[]>([]);
   const [showModal,setShowModal] = useState(false)
-  const [question,setQuestion] = useState<ExamQuestion[]>([])
-  const [loading,setLoading] = useState(false)
+  const {loading,studyData} = useSelectExam()
+  const {handlePostAi,buttonLoading} = useGetExam({setShowModal,loading})
 
-  useEffect(() => {
-    const getData = async () => {
-      const user = auth.currentUser;
-      if (!user) return;
-      const q = query(
-        collection(db, "studyContents"),
-        where("uid", "==", user.uid),
-      );
-      const snapshot = await getDocs(q);
-
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<studyDataType, "id">),
-      }));
-      setStudyData(data);
-    };
-    getData();
-  }, []);
-
-
-
-  const handlePostAi = async ()=> {
-    if(loading ||!postData.content || !postData.count || !auth.currentUser) return;
-    try {
-      setLoading(true)
-      const data = await getExamQuestions(postData.content,postData.count)
-       await addDoc(collection(db,"quizzes"),{
-        uid: auth.currentUser.uid,
-        examData: data,
-        title: postData.title
-      })
-      nav(`/exam/${postData.title}`)
-    } catch (error) {
-      console.error(error)
-      setShowModal(true)
-    }finally{
-      setLoading(false)
-    }
-  }
-
+  if (loading) return <Loading/>
 
   return (
     <>
+    <AuthGuard>
       <Header />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-6">
         <div className="mx-auto max-w-4xl">
@@ -88,7 +37,6 @@ function TestSelect() {
               <h2 className="mb-4 text-xl font-bold text-gray-800">
                 📚 공부 내용 선택
               </h2>
-
               <div className="space-y-3">
                 {studyData.map((data) => (
                   <SelectBox
@@ -111,7 +59,7 @@ function TestSelect() {
                 ))}
               </div>
             </div>
-              <PostButton onClick={handlePostAi} loading={loading}/>
+              <PostButton onClick={handlePostAi} loading={buttonLoading}/>
           </div>
         </div>
 
@@ -124,6 +72,7 @@ function TestSelect() {
           />
         )}
       </div>
+      </AuthGuard>
     </>
   );
 }
