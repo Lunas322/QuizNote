@@ -3,7 +3,7 @@ import { create } from "zustand";
 type PostDataType = {
   content: string;
   count: number;
-  title?: string;
+  title: string;
 };
 
 type PostStore = {
