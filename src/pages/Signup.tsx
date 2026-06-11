@@ -1,5 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { app } from "../firebase/firebase";
 import React, { useState } from "react";
 import AuthInput from "../components/AuthInput";
@@ -24,7 +28,6 @@ function Signup() {
   });
 
   const [rePassword, setRePassword] = useState<string>("");
-
   const [error, setError] = useState({
     email: false,
     password: false,
@@ -46,15 +49,20 @@ function Signup() {
     }
 
     try {
-     const userCredential = await createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         userData.email,
         userData.password,
       );
-      await updateProfile(userCredential.user,{
-        displayName: userData.userName
-      })
-      nav('/')
+      try {
+        await updateProfile(userCredential.user, {
+          displayName: userData.userName,
+        });
+      } catch (error) {
+        console.error("프로필 설정 실패", error);
+        alert("회원가입은 완료되었지만 이름 설정에 실패했습니다.");
+      }
+      nav("/");
     } catch (error) {
       if (isFirebaseError(error)) {
         if (error.code === "auth/email-already-in-use") {
