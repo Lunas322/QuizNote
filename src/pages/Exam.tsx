@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
-import { getAuth } from "firebase/auth";
 import { useResultStore } from "../store/useResult";
 import Modal from "../components/Modal";
 import ProgressBar from "../components/ProgressBar";
@@ -18,7 +17,7 @@ import { useAuth } from "../hooks/useAuth";
 function Exam() {
   const { title } = useParams();
   const { exam, loading } = useExam(title ?? "");
-  const maxCount = exam[0]?.examData.length;
+  const maxCount = exam[0]?.examData.length ?? 0;
   const { questionCount, beforeQuestionCount, nextQuestionCount } =
     useQuestion(maxCount);
   const {user} = useAuth()
