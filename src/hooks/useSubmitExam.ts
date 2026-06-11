@@ -1,0 +1,56 @@
+import { getAuth } from "firebase/auth";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useState } from "react";
+import { db } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+import type { ResultData } from "../types/resultType";
+
+type UseSubmitExamProps = {
+  title: string | undefined;
+  resultData: ResultData;
+};
+
+export function useSubmitExam({ title, resultData }: UseSubmitExamProps) {
+  const [submitting, setSubmitting] = useState(false);
+  const nav = useNavigate();
+  const auth = getAuth();
+
+  const [showModal, setShowModal] = useState(false);
+
+  const fireStoreAddExam = async () => {
+    if (!auth.currentUser?.uid) {
+      throw new Error("로그인이 필요합니다");
+    }
+
+    await addDoc(collection(db, "userAnswer"), {
+      uid: auth.currentUser.uid,
+      title,
+      examId: resultData.examId,
+      userAnswer: resultData.userAnswer,
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  const moveResult = async () => {
+    if (!showModal) {
+      setShowModal(true);
+    } else if (showModal) {
+      try {
+        setSubmitting(true);
+        await fireStoreAddExam();
+        nav(`/result/${resultData.examId}`);
+      } catch (error) {
+        console.error(error);
+        alert(error instanceof Error ? error.message : "서버 저장 실패");
+      } finally {
+        setSubmitting(false);
+      }
+    }
+  };
+  return {
+    moveResult,
+    showModal,
+    setShowModal,
+    submitting,
+  };
+}
